@@ -14,15 +14,22 @@ DB_PATH = BASE_DIR / "warehouse.db"
 STATIC_DIR = BASE_DIR / "static"
 IMG_DIR = STATIC_DIR / "img"
 
+DEFAULT_ITEMS = [
+    {"name": "Cort AnusBass Unlimited Deep Collection", "storage_sector": 12, "weight": 10.0, "price": 1488.0, "quantity": 1, "is_dangerous": False, "image": "/static/img/default.jpg"},
+    {"name": "Fender Pidoraster", "storage_sector": 13, "weight": 11.0, "price": 666.0, "quantity": 1, "is_dangerous": False, "image": "/static/img/default.jpg"},
+    {"name": "Gibson Mrs oldcunt whore slut", "storage_sector": 14, "weight": 9.0, "price": 4000.0, "quantity": 1, "is_dangerous": False, "image": "/static/img/default.jpg"},
+    {"name": "Yamaha DX-1488", "storage_sector": 14, "weight": 100.0, "price": 10000.0, "quantity": 1, "is_dangerous": True, "image": "/static/img/default.jpg"},
+    {"name": "8", "storage_sector": 15, "weight": 15.0, "price": 1000000.0, "quantity": 1, "is_dangerous": False, "image": "/static/img/default.jpg"},
+]
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Инициализация при запуске"""
     IMG_DIR.mkdir(parents=True, exist_ok=True)
     init_database()
+    seed_database()
     yield
 
 def init_database():
-    """Создание таблицы если не существует"""
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute('''
@@ -38,6 +45,20 @@ def init_database():
         )
     ''')
     conn.commit()
+    conn.close()
+
+def seed_database():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM items")
+    count = cursor.fetchone()[0]
+    if count == 0:
+        for item in DEFAULT_ITEMS:
+            cursor.execute('''
+                INSERT INTO items (name, storage_sector, weight, price, quantity, is_dangerous, image)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (item["name"], item["storage_sector"], item["weight"], item["price"], item["quantity"], 1 if item["is_dangerous"] else 0, item["image"]))
+        conn.commit()
     conn.close()
 
 app = FastAPI(

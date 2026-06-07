@@ -293,7 +293,25 @@ def get_cart_details(user_id: str):
 
 FRONTEND_DIR = BASE_DIR.parent / "frontend"
 
+app.mount("/css", StaticFiles(directory=str(FRONTEND_DIR)), name="css")
+app.mount("/js", StaticFiles(directory=str(FRONTEND_DIR)), name="js")
+
 @app.get("/", include_in_schema=False)
-def serve_frontend():
+def serve_index():
     from fastapi.responses import FileResponse
     return FileResponse(str(FRONTEND_DIR / "index.html"))
+
+@app.get("/add.html", include_in_schema=False)
+def serve_add():
+    from fastapi.responses import FileResponse
+    return FileResponse(str(FRONTEND_DIR / "add.html"))
+
+@app.get("/cart.html", include_in_schema=False)
+def serve_cart():
+    from fastapi.responses import FileResponse
+    return FileResponse(str(FRONTEND_DIR / "cart.html"))
+
+@app.get("/item.html", include_in_schema=False)
+def serve_item():
+    from fastapi.responses import FileResponse
+    return FileResponse(str(FRONTEND_DIR / "item.html"))

@@ -30,7 +30,7 @@ form.addEventListener('submit', async (event) => {
 
     if (response.status === 201) {
         alert("✅ Товар успешно (к сожалению) добавлен");
-        window.location.href = "index.html";
+        window.location.href = "/";
     } else {
         alert("𝕏 Ошибка при загрузке. Проверь консоль браузера.");
         console.log(await response.json);

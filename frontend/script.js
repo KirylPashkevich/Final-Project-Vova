@@ -29,12 +29,9 @@ function renderCards(items){
                 <span> Кол-во <b>${item.quantity}</b> </span>
                 <span class="card-extra"> ${item.is_dangerous ? 'Опасно!' : 'Безопасно'} </span>
             </div>
-            <div class="card-footer" style="display: flex; gap: 5px; margin-topp: 10px;">
-                <button class="btn-more"
-            onclick="window.location.hrref='item.htm;?id=${item.id}'">
-            </button>
-            <button class="btn-more" onclick="window.location.href='item.html?id=${item.id}'">Подробнее </button>
-            <button class="btn-more" onclick="addToCart(${item.id})">в корзину</button>
+            <div class="card-footer" style="display: flex; gap: 5px; margin-top: 10px;">
+                <button class="btn-more" onclick="window.location.href='/item.html?id=${item.id}'">Подробнее</button>
+                <button class="btn-more" onclick="addToCart(${item.id})">в корзину</button>
         `;
         container.appendChild(card)
     });
